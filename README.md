@@ -13,9 +13,39 @@ domain service -> domain repo
 
 A ideia é que cada dominio possa ser separados em um "nano-serviço", pensando em `clustering`.
 
+### Erros
+Erro em regras irão retornar um JSON padrão:
+
+```json
+{
+    "rpl": "ERR_"
+}
+```
+
+Cada "regra" pode ter um status code diferente.
+
 ## Cadastrar nova pauta
 
 > POST /api/pautas
+
+Payload:
+```json
+{
+    "nome": string // Nome da Pauta, usado para conseguir diferenciar
+}
+```
+Response:
+```json
+{
+    "id": string, // UUID
+    "nome": string // Nome da pauta
+}
+```
+Regras:
+- Pauta sem nome: 
+  - Response 
+    - code: 400 
+    - rpl: ERR_PAUTA_SEM_NOME
 
 ## Abrir sessão de votação em uma pauta
 
