@@ -45,11 +45,42 @@ Regras:
 - Pauta sem nome: 
   - Response 
     - code: 400 
-    - rpl: ERR_PAUTA_SEM_NOME
+    - ERR_PAUTA_SEM_NOME
 
 ## Abrir sessão de votação em uma pauta
 
 > POST /api/pautas/{pauta_id}/sessoes
+
+Payload
+```json
+{
+    "duracao": integer // Duração, padrão 1 minuto.
+}
+```
+Response:
+```json
+{
+    "id": string, // ID
+    "pauta": string, // ID da pauta,
+    "tsCriacao": string, // timestamp de criação,
+    "tsFim": string // timestamp do fim da sessão
+}
+```
+> Formato Timestamp: "2024-09-26T20:14:00.5643454"
+
+Regras:
+- Pauta não existe:
+  - Response
+    - Code 404
+    - ERR_PAUTA_NAO_EXISTE
+- Pauta já possui Sessão
+  - Response
+    - Code 406
+    - ERR_PAUTA_POSSUI_SESSAO
+
+### Cache
+- Ao buscar a Pauta, para verificar a existencia.
+- Ao consultar Sessões (a partir da Pauta), para inibir mais de uma Sessão na Pauta.
 
 ## Receber votos dos associados em pautas
 
