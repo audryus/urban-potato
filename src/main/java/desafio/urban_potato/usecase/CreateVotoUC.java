@@ -37,10 +37,12 @@ public class CreateVotoUC {
 			throw new SessaoEncerradaException();
 		}
 		
-		var associado = associadoService.get(cpf)
+		var numerosCPF = removerMascara(cpf);
+		
+		var associado = associadoService.get(numerosCPF)
 				.orElseGet(() -> 
 					associadoService.create(Associado.builder()
-							.cpf(cpf)
+							.cpf(numerosCPF)
 							.build()));
 		
 		var voto = votoService.getBySessaoAndAssociado(
@@ -58,6 +60,10 @@ public class CreateVotoUC {
 		votoService.create(voto);
 		
 		log.info("[VOTO] {} criado", voto);
+	}
+	
+	private String removerMascara(String str){ 
+		return str.replaceAll("\\D", ""); 
 	}
 	
 	private void check(Voto voto) {

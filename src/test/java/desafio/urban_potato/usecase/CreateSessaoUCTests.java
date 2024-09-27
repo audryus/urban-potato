@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import desafio.urban_potato.controller.req.ReqAberturaSessaoDTO;
+import desafio.urban_potato.controller.req.ReqAberturaSessaoVO;
 import desafio.urban_potato.domain.pauta.Pauta;
 import desafio.urban_potato.domain.pauta.PautaService;
 import desafio.urban_potato.domain.sessao.Sessao;
@@ -44,7 +44,7 @@ class CreateSessaoUCTests {
 		when(pautaService.get(any()))
 			.thenReturn(Optional.of(new Pauta()));
 		
-		ReqAberturaSessaoDTO request = new ReqAberturaSessaoDTO(5);
+		ReqAberturaSessaoVO request = new ReqAberturaSessaoVO(5);
 		
 		when(sessaoService.create(any()))
 		.thenAnswer(new Answer<Sessao>() {

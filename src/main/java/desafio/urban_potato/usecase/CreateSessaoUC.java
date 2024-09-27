@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import desafio.urban_potato.controller.req.ReqAberturaSessaoDTO;
+import desafio.urban_potato.controller.req.ReqAberturaSessaoVO;
+import desafio.urban_potato.controller.res.ResSessaoVO;
 import desafio.urban_potato.domain.pauta.PautaService;
 import desafio.urban_potato.domain.sessao.Sessao;
 import desafio.urban_potato.domain.sessao.SessaoService;
@@ -23,9 +24,9 @@ public class CreateSessaoUC {
 	private final SessaoService sessaoService;
 	private final AppProperties props;
 	
-	public Sessao create(
+	public ResSessaoVO create(
 			String pauta, 
-			ReqAberturaSessaoDTO abertura) {
+			ReqAberturaSessaoVO abertura) {
 		if (pautaService.get(pauta).isEmpty()) {
 			throw new PautaNaoExisteException();
 		}
@@ -49,7 +50,12 @@ public class CreateSessaoUC {
 		
 		log.info("[SESSAO] {} criada.", sessao);
 		
-		return sessao;
+		return new ResSessaoVO(
+				sessao.getId(), 
+				pauta, 
+				sessao.getTsCriacao(), 
+				sessao.getTsFim(), 
+				null);
 	}
 
 }

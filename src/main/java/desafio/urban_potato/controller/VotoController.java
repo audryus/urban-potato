@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import desafio.urban_potato.controller.req.ReqVotoDTO;
+import desafio.urban_potato.controller.req.ReqVotoVO;
 import desafio.urban_potato.controller.res.ResReplyVO;
 import desafio.urban_potato.usecase.CreateVotoUC;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class VotoController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResReplyVO create(
 			@PathVariable(name = "sessao") String sessao,
-			@RequestBody ReqVotoDTO voto
+			@RequestBody ReqVotoVO voto
 			) {
 		createVotoUC.create( 
 				sessao, 

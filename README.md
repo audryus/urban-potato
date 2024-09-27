@@ -14,34 +14,40 @@ domain service -> domain repo
 A ideia é que cada dominio possa ser separados em um "nano-serviço", pensando em `clustering`.
 
 ### Erros
-Erro em regras irão retornar um JSON padrão:
+Erro oriundos de regras irão retornar um JSON padrão:
 
 ```json
 {
-    "rpl": "ERR_"
+    "rpl": "ERR_*"
 }
 ```
 
 Cada "regra" pode ter um status code diferente.
+Este retorno pode ser usado pelo `client` para fazer algum tratamento adequado.
+
+## Execução
+> docker compose up
 
 ## Cadastrar nova pauta
 
 > POST /api/pautas
 
-Payload:
+#### Payload:
 ```json
 {
     "nome": string // Nome da Pauta, usado para conseguir diferenciar
 }
 ```
-Response:
+#### Response:
 ```json
 {
     "id": string, // UUID
-    "nome": string // Nome da pauta
+    "nome": string, // Nome da pauta
+    "tsCriacao": string -> "2024-09-26 22:07",
+    "sessao": null // Indica que não há Sessão
 }
 ```
-Regras:
+#### Regras:
 - Pauta sem nome: 
   - Response 
     - code: 400 
@@ -51,24 +57,25 @@ Regras:
 
 > POST /api/pautas/{pauta_id}/sessoes
 
-Payload
+#### Payload
 ```json
 {
     "duracao": integer // Duração, padrão 1 minuto.
 }
 ```
-Response:
+#### Response:
 ```json
 {
     "id": string, // ID
     "pauta": string, // ID da pauta,
     "tsCriacao": string, // timestamp de criação,
-    "tsFim": string // timestamp do fim da sessão
+    "tsFim": string, // timestamp do fim da sessão
+    "votos": null // Indica que não há votos na Sessão
 }
 ```
-> Formato Timestamp: "2024-09-26T20:14:00.5643454"
+> Formato Timestamp: "2024-09-26 20:14"
 
-Regras:
+#### Regras:
 - Pauta não existe:
   - Response
     - Code 404
@@ -88,7 +95,7 @@ Regras:
 
 - URL mudou, pois não preciso da Pauta, e caso precise obtenho-a pela Sessão enviada.
 
-Payload
+#### Payload
 ```json
 {
     "associado": string, // CPF
@@ -98,14 +105,16 @@ Payload
 
 > Não possuo cadastro de Associado, poderia ser feito uma carga (migração, liquibase), todavia é mais produtivo, neste desafio, o `ID único` ser o `CPF`, na verdade pode ser qualquer `String`.
 
-Response // Status code 201
+> Caso o `CPF` não exista, será criado um Associado com o valor informado.
+
+#### Response // Status code 201
 ```json
 {
     "rpl": "RPL_VOTO"
 }
 ```
 
-Regras
+#### Regras
 - Sessão não existe
   - Response
     - Code 404
@@ -122,7 +131,25 @@ Regras
 ## Contabilizar votos e resultado da pauta
 
 > GET /api/pautas
-
-
-## Execução
-> docker compose up
+#### Response
+```json
+[
+    {
+        "id": string,
+        "pauta": string,
+        "tsCriacao": string -> "2024-09-26 21:47",
+        "sessao": {
+            "id": string,
+            "pauta": string (id pauta),
+            "tsCriacao": string -> "2024-09-26 21:47",
+            "tsFim": string -> "2024-09-26 22:07",
+            "votos": [
+                {
+                    "escolha": string -> "Sim"|"Não",
+                    "total": integer
+                }
+            ]
+        }
+    }
+]
+```

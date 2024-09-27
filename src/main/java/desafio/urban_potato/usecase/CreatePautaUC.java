@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import desafio.urban_potato.controller.req.ReqPautaDTO;
-import desafio.urban_potato.controller.res.ResPautaDTO;
+import desafio.urban_potato.controller.req.ReqPautaVO;
+import desafio.urban_potato.controller.res.ResPautaVO;
 import desafio.urban_potato.domain.pauta.Pauta;
 import desafio.urban_potato.domain.pauta.PautaService;
 import desafio.urban_potato.exceptions.PautaSemNomeException;
@@ -20,20 +20,24 @@ public class CreatePautaUC {
 	
 	private final PautaService pautaService;
 	
-	public ResPautaDTO create(ReqPautaDTO request) {
+	public ResPautaVO create(ReqPautaVO request) {
 		if (StringUtils.isEmpty(request.nome())) {
 			throw new PautaSemNomeException();
 		}
 		
 		var pauta = pautaService.create(
-				Pauta.of(UUID.randomUUID().toString(), 
-				request.nome()));
+				Pauta.builder()
+				.id(UUID.randomUUID().toString())
+				.nome(request.nome())
+				.build());
 		
 		log.info("[PAUTA] {} criada", pauta);
 		
-		return new ResPautaDTO(
+		return new ResPautaVO(
 				pauta.getId(), 
-				pauta.getNome());
+				pauta.getNome(),
+				pauta.getTsCriacao(),
+				null);
 	}
 
 }
