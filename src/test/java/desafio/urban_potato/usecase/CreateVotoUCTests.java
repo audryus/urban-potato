@@ -60,7 +60,7 @@ class CreateVotoUCTests {
 				.tsFim(LocalDateTime.now().plusMinutes(1))
 				.build()));
 		
-		when(associadoService.get("cpf"))
+		when(associadoService.get("12345678900"))
 		.thenReturn(Optional.of(Associado.builder()
 				.cpf("cpf")
 				.build()));
@@ -68,11 +68,11 @@ class CreateVotoUCTests {
 		when(votoService.getBySessaoAndAssociado("sessao", "cpf"))
 			.thenReturn(Optional.of(Voto.builder()
 					.sessao("sessao")
-					.associado("cpf")
+					.associado("12345678900")
 					.build()));
 		
 		assertThrows(VotoJaCadastradoException.class, 
-				() -> uc.create("sessao", "cpf", "sim"));
+				() -> uc.create("sessao", "123.456.789-00", "sim"));
 	}
 
 	@Test void create() {
@@ -81,7 +81,7 @@ class CreateVotoUCTests {
 				.tsFim(LocalDateTime.now().plusMinutes(1))
 				.build()));
 		
-		when(associadoService.get("cpf"))
+		when(associadoService.get("12345678978"))
 			.thenReturn(Optional.empty());
 		
 		when(associadoService.create(any()))
@@ -91,19 +91,19 @@ class CreateVotoUCTests {
 			public Associado answer(InvocationOnMock invocation) throws Throwable {
 				Associado a = invocation.getArgument(0);
 				assertNotNull(a);
-				assertEquals("cpf", a.getCpf());
+				assertEquals("12345678978", a.getCpf());
 				return a;
 			}
 		});
 		
-		when(votoService.getBySessaoAndAssociado("sessao", "cpf"))
+		when(votoService.getBySessaoAndAssociado("sessao", "12345678978"))
 		.thenReturn(Optional.of(Voto.builder()
 				.sessao("sessao")
-				.associado("cpf")
+				.associado("12345678978")
 				.build()));
 		
 		assertThrows(VotoJaCadastradoException.class, 
-				() -> uc.create("sessao", "cpf", "sim"));
+				() -> uc.create("sessao", "123.456.789-78", "sim"));
 	}
 
 }
