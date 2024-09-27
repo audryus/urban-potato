@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>desafio</groupId>
 	<artifactId>urban-potato</artifactId>
-	<version>0.1.0</version>
+	<version>0.7.0</version>
 	<name>urban-potato</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -61,6 +61,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

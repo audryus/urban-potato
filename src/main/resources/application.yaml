@@ -8,14 +8,14 @@ management.tracing.enabled: true
 spring:
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false
     properties.hibernate.format_sql: true
   datasource:
-    url: jdbc:sqlite:src/main/resources/desafio.db
-    username: sa
-    password: sa
+    url: ${DB_URL:jdbc:sqlite:src/main/resources/desafio.db}
+    username: ${DB_USER:sa}
+    password: ${DB_PASS:sa}
   liquibase:
-    url: jdbc:sqlite:src/main/resources/desafio.db
-    user: sa
-    password: sa
+    url: ${DB_URL:jdbc:sqlite:src/main/resources/desafio.db}
+    user: ${DB_USER:sa}
+    password: ${DB_PASS:sa}
     change-log: classpath:db/changelog/db.changelog-master.xml
