@@ -40,12 +40,16 @@ public class CreateSessaoUC {
 			duracao = abertura.duracao();
 		}
 		
-		return sessaoService.create(
+		var sessao = sessaoService.create(
 				Sessao.builder()
 				.pauta(pauta)
 				.tsFim(LocalDateTime.now()
 						.plusMinutes(duracao))
 				.build());
+		
+		log.info("[SESSAO] {} criada.", sessao);
+		
+		return sessao;
 	}
 
 }

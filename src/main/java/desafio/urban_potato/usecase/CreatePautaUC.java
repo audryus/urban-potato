@@ -29,7 +29,7 @@ public class CreatePautaUC {
 				Pauta.of(UUID.randomUUID().toString(), 
 				request.nome()));
 		
-		log.info("[PAUTA] {} criada");
+		log.info("[PAUTA] {} criada", pauta);
 		
 		return new ResPautaDTO(
 				pauta.getId(), 

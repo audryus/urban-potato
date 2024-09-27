@@ -84,7 +84,40 @@ Regras:
 
 ## Receber votos dos associados em pautas
 
-> POST /api/pautas/{pauta_id}/sessoes/{sessao_id}/votos
+> POST /api/sessoes/{sessao_id}/votos
+
+- URL mudou, pois não preciso da Pauta, e caso precise obtenho-a pela Sessão enviada.
+
+Payload
+```json
+{
+    "associado": string, // CPF
+    "voto": enum string ("Sim"|"Não") // Apenas o SIM é analisado, caso contrário é NÃO 
+}
+```
+
+> Não possuo cadastro de Associado, poderia ser feito uma carga (migração, liquibase), todavia é mais produtivo, neste desafio, o `ID único` ser o `CPF`, na verdade pode ser qualquer `String`.
+
+Response // Status code 201
+```json
+{
+    "rpl": "RPL_VOTO"
+}
+```
+
+Regras
+- Sessão não existe
+  - Response
+    - Code 404
+    - ERR_SESSAO_NAO_EXISTE
+- Sessão já está encerrada (após tsFim)
+  - Response
+    - Code 412
+    - ERR_SESSAO_ENCERRADA
+- Voto já foi cadastrado
+  - Response
+    - 409
+    - ERR_VOTO_CADASTRADO
 
 ## Contabilizar votos e resultado da pauta
 

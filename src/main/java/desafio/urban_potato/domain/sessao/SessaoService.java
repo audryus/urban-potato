@@ -28,4 +28,10 @@ public class SessaoService {
 		return repo.findByPauta(pauta);
 	}
 	
+	@Cacheable(value = "sessao", 
+			unless = "#result == null")
+	public Optional<Sessao> get(String sessao) {
+		return repo.findById(sessao);
+	}
+	
 }

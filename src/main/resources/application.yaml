@@ -2,7 +2,9 @@ server.servlet.context-path: /api
 
 app:
   duracaoSessao: ${DURACAO_SESSAO_MINUTOS:1}
-  
+
+management.tracing.enabled: true
+
 spring:
   jpa:
     open-in-view: false
