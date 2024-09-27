@@ -3,6 +3,7 @@ package desafio.urban_potato.usecase;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import desafio.urban_potato.controller.req.ReqAberturaSessaoVO;
 import desafio.urban_potato.controller.res.ResSessaoVO;
@@ -24,6 +25,7 @@ public class CreateSessaoUC {
 	private final SessaoService sessaoService;
 	private final AppProperties props;
 	
+	@Transactional
 	public ResSessaoVO create(
 			String pauta, 
 			ReqAberturaSessaoVO abertura) {

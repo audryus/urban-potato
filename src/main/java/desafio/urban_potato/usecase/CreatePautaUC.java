@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import desafio.urban_potato.controller.req.ReqPautaVO;
 import desafio.urban_potato.controller.res.ResPautaVO;
@@ -20,6 +21,7 @@ public class CreatePautaUC {
 	
 	private final PautaService pautaService;
 	
+	@Transactional
 	public ResPautaVO create(ReqPautaVO request) {
 		if (StringUtils.isEmpty(request.nome())) {
 			throw new PautaSemNomeException();

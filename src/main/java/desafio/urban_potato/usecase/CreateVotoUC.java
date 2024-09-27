@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import desafio.urban_potato.domain.associado.Associado;
 import desafio.urban_potato.domain.associado.AssociadoService;
@@ -26,6 +27,7 @@ public class CreateVotoUC {
 	private final AssociadoService associadoService;
 	private final VotoService votoService;
 	
+	@Transactional
 	public void create(
 			String sessaoID, 
 			String cpf, 
