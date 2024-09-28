@@ -27,6 +27,10 @@ public class VotoService {
 	}
 
 	@Cacheable(value = "votos_count_sessao_escolha")
+	public long countCached(String sessao, Escolha e) {
+		return repo.countBySessaoAndEscolha(sessao, e);
+	}
+	
 	public long count(String sessao, Escolha e) {
 		return repo.countBySessaoAndEscolha(sessao, e);
 	}

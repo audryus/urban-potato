@@ -1,1 +1,2 @@
 spring.liquibase.enabled: false
+spring.scheduling.enabled: false

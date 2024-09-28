@@ -54,7 +54,7 @@ public class GetPautaUC {
 		return Stream.of(Escolha.values())
 		.map(e -> 
 			new ResVotoVO(e.toString(), 
-					votoService.count(sessao, e)))
+					votoService.countCached(sessao, e)))
 		.toList();
 	}
 

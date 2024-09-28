@@ -5,7 +5,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +35,16 @@ public class SessaoService {
 			unless = "#result == null")
 	public Optional<Sessao> get(String sessao) {
 		return repo.findById(sessao);
+	}
+
+	public Slice<Sessao> getAllSemNotificacao(Pageable page) {
+		return repo.findAllSemNotificacao(LocalDateTime.now(), page);
+	}
+
+	@Transactional
+	public void notificada(Sessao sessao) {
+		sessao.setNotificado(true);
+		repo.save(sessao);
 	}
 	
 }

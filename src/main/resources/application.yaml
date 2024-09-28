@@ -2,10 +2,22 @@ server.servlet.context-path: /api
 
 app:
   duracaoSessao: ${DURACAO_SESSAO_MINUTOS:1}
+  cron.encerrar-sessao: ${CRON_ENCERRAR_SESSAO:0 * * * * *}
+
+query.limit:
+  encerrar-sessao: ${QUERY_LIMIT_ENCERRAR_SESSAO:10}
 
 management.tracing.enabled: true
 
+queue:
+  pauta.resultado: pauta.resultado
+
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
   jpa:
     open-in-view: false
     show-sql: false

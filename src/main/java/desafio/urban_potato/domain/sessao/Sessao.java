@@ -32,5 +32,7 @@ public class Sessao {
 	@Column(name = "ts_fim")
 	private LocalDateTime tsFim;
 
+	@Column(name = "notificado")
+	private boolean notificado;
 	
 }

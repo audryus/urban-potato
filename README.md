@@ -153,3 +153,11 @@ Este retorno pode ser usado pelo `client` para fazer algum tratamento adequado.
     }
 ]
 ```
+
+## Tarefas bônus
+
+### Integração de sistemas externos
+Infelizmente a API fornecida não se encontra disponivel.
+
+### Mensageria e filas
+> Normalmente para "perceber" o encerramento, eu usaria o TTL no Redis. Neste caso irei fazer um Scheduler.
