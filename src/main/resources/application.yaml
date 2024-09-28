@@ -2,7 +2,9 @@ server.servlet.context-path: /api
 
 app:
   duracaoSessao: ${DURACAO_SESSAO_MINUTOS:1}
-  cron.encerrar-sessao: ${CRON_ENCERRAR_SESSAO:0 * * * * *}
+  cron:
+    encerrar-sessao: ${CRON_ENCERRAR_SESSAO:0 * * * * *}
+    votos-count: ${CRON_VOTOS_COUNT:0 * * * * *}
 
 query.limit:
   encerrar-sessao: ${QUERY_LIMIT_ENCERRAR_SESSAO:10}
@@ -11,23 +13,37 @@ management.tracing.enabled: true
 
 queue:
   pauta.resultado: pauta.resultado
+  voto: voto
 
 spring:
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: rabbitmq
-    password: rabbitmq
+    listener:
+        simple:
+          default-requeue-rejected: false
+          retry:
+            enabled: false
+            initial-interval: 3s
+            max-attempts: 2
+            multiplier: 2
+            max-interval: 10s
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:rabbitmq}
+    password: ${RABBIT_PASS:rabbitmq}
   jpa:
     open-in-view: false
     show-sql: false
     properties.hibernate.format_sql: true
   datasource:
-    url: ${DB_URL:jdbc:sqlite:src/main/resources/desafio.db}
-    username: ${DB_USER:sa}
-    password: ${DB_PASS:sa}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 200
+      minimum-idle: 40
   liquibase:
-    url: ${DB_URL:jdbc:sqlite:src/main/resources/desafio.db}
-    user: ${DB_USER:sa}
-    password: ${DB_PASS:sa}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    user: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
     change-log: classpath:db/changelog/db.changelog-master.xml

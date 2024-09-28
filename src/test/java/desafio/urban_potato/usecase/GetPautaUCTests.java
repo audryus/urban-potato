@@ -17,8 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import desafio.urban_potato.TestContainerConfiguration;
 import desafio.urban_potato.controller.res.ResPautaVO;
 import desafio.urban_potato.controller.res.ResSessaoVO;
 import desafio.urban_potato.controller.res.ResVotoVO;
@@ -26,10 +28,13 @@ import desafio.urban_potato.domain.pauta.Pauta;
 import desafio.urban_potato.domain.pauta.PautaService;
 import desafio.urban_potato.domain.sessao.Sessao;
 import desafio.urban_potato.domain.sessao.SessaoService;
+import desafio.urban_potato.domain.voto.Escolha;
+import desafio.urban_potato.domain.voto.Voto;
 import desafio.urban_potato.domain.voto.VotoService;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(TestContainerConfiguration.class)
 class GetPautaUCTests {
 	
 	@Autowired GetPautaUC uc;
@@ -63,7 +68,7 @@ class GetPautaUCTests {
 			fail(e);
 		}
 		
-		verify(votoService, times(0)).count(any(), any());
+		verify(votoService, times(0)).getAllBySessaoCached(any());
 	}
 
 	@Test void getAll_SemVotos() {
@@ -83,7 +88,7 @@ class GetPautaUCTests {
 			fail(e);
 		}
 		
-		verify(votoService, times(2)).count(any(), any());
+		verify(votoService, times(1)).getAllBySessaoCached(any());
 	}
 
 	@Test void getAll() {
@@ -97,9 +102,14 @@ class GetPautaUCTests {
 				.id("sessao")
 				.build()));
 		
-		when(votoService.count(any(), any()))
-		.thenReturn(2L)
-		.thenReturn(5L);
+		when(votoService.getAllBySessaoCached(any()))
+		.thenReturn(Arrays.asList(
+				Voto.builder()
+				.escolha(Escolha.SIM)
+				.build(),Voto.builder()
+				.escolha(Escolha.NAO)
+				.build()
+				));
 		
 		try {
 			List<ResPautaVO> all = uc.getAll();
@@ -115,7 +125,7 @@ class GetPautaUCTests {
 			fail(e);
 		}
 		
-		verify(votoService, times(2)).count(any(), any());
+		verify(votoService, times(1)).getAllBySessaoCached(any());
 	}
 	
 }

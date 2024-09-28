@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import desafio.urban_potato.TestContainerConfiguration;
 import desafio.urban_potato.controller.req.ReqPautaVO;
 import desafio.urban_potato.domain.pauta.Pauta;
 import desafio.urban_potato.domain.pauta.PautaService;
@@ -19,6 +21,7 @@ import desafio.urban_potato.exceptions.PautaSemNomeException;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(TestContainerConfiguration.class)
 class CreatePautaUCTests {
 
 	@Autowired CreatePautaUC uc;

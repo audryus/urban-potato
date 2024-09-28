@@ -15,8 +15,10 @@ import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import desafio.urban_potato.TestContainerConfiguration;
 import desafio.urban_potato.controller.req.ReqAberturaSessaoVO;
 import desafio.urban_potato.domain.pauta.Pauta;
 import desafio.urban_potato.domain.pauta.PautaService;
@@ -26,6 +28,7 @@ import desafio.urban_potato.exceptions.PautaNaoExisteException;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(TestContainerConfiguration.class)
 class CreateSessaoUCTests {
 	
 	@Autowired CreateSessaoUC uc;

@@ -1,11 +1,49 @@
 version: '3.7'
 
 services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 10s
+      interval: 10s
+      retries: 5
+      timeout: 5s
+  amqp:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports:
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      start_period: 10s
+      interval: 10s
+      retries: 5
+      timeout: 5s
   api:
     build:
       context: /
       dockerfile: Dockerfile
     environment:
-      DB_URL: jdbc:sqlite:/db/desafio.db
+      DB_URL: jdbc:postgresql://db:5432/postgres
+      DB_USER: postgres
+      DB_PASS: postgres
+      RABBIT_HOST: amqp
+      RABBIT_PORT: 5672
+      RABBIT_USER: rabbitmq
+      RABBIT_PASS: rabbitmq
     ports:
         - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      amqp:
+        condition: service_healthy

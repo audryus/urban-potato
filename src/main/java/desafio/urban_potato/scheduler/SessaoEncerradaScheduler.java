@@ -16,7 +16,6 @@ import desafio.urban_potato.domain.sessao.Sessao;
 import desafio.urban_potato.domain.sessao.SessaoService;
 import desafio.urban_potato.domain.voto.Escolha;
 import desafio.urban_potato.domain.voto.VotoService;
-import desafio.urban_potato.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +27,6 @@ public class SessaoEncerradaScheduler {
 	private final SessaoService sessaoService;
 	private final PautaResultadoAmqp pautaResultado;
 	private final VotoService votoService;
-	private final JsonUtils json;
 	
 	@Value("${query.limit.encerrar-sessao}")
 	int queryLimit;
@@ -47,7 +45,7 @@ public class SessaoEncerradaScheduler {
 			
 			content.forEach(sessao -> {
 				try {
-					pautaResultado.send(toMessage(sessao));
+					pautaResultado.send(getResultado(sessao));
 					log.info("[SCHEDULER Encerrar Sessao] {} enviado com sucesso.", 
 							sessao);
 					sessaoService.notificada(sessao);
@@ -63,24 +61,27 @@ public class SessaoEncerradaScheduler {
 		log.info("[SCHEDULER Encerrar Sessao] Fim ...");
 	}
 	
-	private String toMessage(Sessao s) {
+	private ResSessaoVO getResultado(Sessao s) {
 		var votos = getVotos(s.getId());
-		var resultado = new ResSessaoVO(
+		return new ResSessaoVO(
 				s.getId(),
 				s.getPauta(),
 				s.getTsCriacao(),
 				s.getTsFim(), 
 				votos);
-		
-		return json.toJson(resultado);
 	}
 	
 	private List<ResVotoVO> getVotos(String sessao) {
+		var votos = votoService.getAllBySessao(sessao);
+		
 		return Stream.of(Escolha.values())
-		.map(e -> 
-			new ResVotoVO(e.toString(), 
-					votoService.count(sessao, e)))
-		.toList();
+		.map(e -> {
+			var count = votos.stream()
+			.filter(v -> v.getEscolha().equals(e))
+			.count();
+			
+			return new ResVotoVO(e.toString(), count);
+		}).toList();
 	}
 	
 }

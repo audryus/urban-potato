@@ -51,11 +51,16 @@ public class GetPautaUC {
 	}
 	
 	private List<ResVotoVO> getVotos(String sessao) {
+		var votos = votoService.getAllBySessaoCached(sessao);
+		
 		return Stream.of(Escolha.values())
-		.map(e -> 
-			new ResVotoVO(e.toString(), 
-					votoService.countCached(sessao, e)))
-		.toList();
+		.map(e -> {
+			var count = votos.stream()
+			.filter(v -> v.getEscolha().equals(e))
+			.count();
+			
+			return new ResVotoVO(e.toString(), count);
+		}).toList();
 	}
 
 }

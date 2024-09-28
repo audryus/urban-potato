@@ -15,8 +15,10 @@ import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import desafio.urban_potato.TestContainerConfiguration;
 import desafio.urban_potato.domain.associado.Associado;
 import desafio.urban_potato.domain.associado.AssociadoService;
 import desafio.urban_potato.domain.sessao.Sessao;
@@ -29,6 +31,7 @@ import desafio.urban_potato.exceptions.VotoJaCadastradoException;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(TestContainerConfiguration.class)
 class CreateVotoUCTests {
 	
 	@Autowired CreateVotoUC uc;
